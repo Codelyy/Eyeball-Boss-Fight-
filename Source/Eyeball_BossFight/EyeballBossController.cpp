@@ -40,7 +40,7 @@ void AEyeballBossController::Possess(APawn* pawn)
 void AEyeballBossController::Tick(float DeltaTime)
 {
 	blackboardComp->SetValueAsVector(FName("PlayerPosition"), UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation());
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, blackboardComp->GetValueAsVector(FName("PlayerPosition")).ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, blackboardComp->GetValueAsVector(FName("PlayerPosition")).ToString());
 }
 
 void AEyeballBossController::SetPlayerToFollow(APawn* pawn)

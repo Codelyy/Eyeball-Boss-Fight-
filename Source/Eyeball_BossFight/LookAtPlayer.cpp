@@ -19,7 +19,17 @@ void ULookAtPlayer::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	FVector playerPos = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
-	GetOwner()->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetActorLocation(), playerPos), ETeleportType::None);
+	if (rotate)
+	{
+		FVector playerPos = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+		FRotator rotationDir = UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetActorLocation(), playerPos);
+		//GetOwner()->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(GetOwner()->GetActorLocation(), playerPos), ETeleportType::None);
+		GetOwner()->SetActorRotation(FMath::RInterpTo(GetOwner()->GetActorRotation(), rotationDir, DeltaTime, rotationSpeed), ETeleportType::None);
+	}
+}
+
+void ULookAtPlayer::SetRotate(bool value)
+{
+	rotate = value;
 }
 
