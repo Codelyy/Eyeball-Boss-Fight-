@@ -7,6 +7,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
+#include "LookAtPlayer.h"
+#include "Components/PointLightComponent.h"
 #include "Components/ArrowComponent.h"
 
 // Sets default values
@@ -24,10 +26,13 @@ AEyeballBoss::AEyeballBoss()
 	FacingDirection = CreateDefaultSubobject<UArrowComponent>(TEXT("FacingDirection"));
 	FacingDirection->AttachToComponent(eyeballRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
-	timeLine = CreateDefaultSubobject<UTimelineComponent>(TEXT("Timeline"));
-	InterpFunction.BindUFunction(this, FName("TimelineFloatReturn"));
-	TimelineFinished.BindUFunction(this, FName("OnTimelineFinished"));
+	bounceTimeLine = CreateDefaultSubobject<UTimelineComponent>(TEXT("BounceTimeLine"));
+	BounceInterpFunction.BindUFunction(this, FName("BounceTimelineFloatReturn"));
+	BounceTimelineFinished.BindUFunction(this, FName("BounceOnTimelineFinished"));
 	zOffset = 50.0f;
+
+	eyeColourTimeLine = CreateDefaultSubobject<UTimelineComponent>(TEXT("EyeColourTimeLine"));
+	EyeColourInterpFunction.BindUFunction(this, FName("EyeColourTimelineFloatReturn"));
 }
 
 // Called when the game starts or when spawned
@@ -49,18 +54,29 @@ void AEyeballBoss::BeginPlay()
 
 	if (bounceCurve)
 	{
-		timeLine->AddInterpFloat(bounceCurve, InterpFunction, FName("Alpha"));
-		timeLine->SetTimelineFinishedFunc(TimelineFinished);
+		bounceTimeLine->AddInterpFloat(bounceCurve, BounceInterpFunction, FName("Alpha"));
+		bounceTimeLine->SetTimelineFinishedFunc(BounceTimelineFinished);
 
 		startPos = GetActorLocation();
 		endPos = FVector(startPos.X, startPos.Y, startPos.Z + zOffset);
 
 		//Setting Timeline settings
-		timeLine->SetLooping(false);
-		timeLine->SetIgnoreTimeDilation(true);
+		bounceTimeLine->SetLooping(false);
+		bounceTimeLine->SetIgnoreTimeDilation(true);
 
 		//Start the Timeline
-		timeLine->Play();
+		bounceTimeLine->Play();
+	}
+
+	if (eyeColourCurve)
+	{
+		eyeColourTimeLine->AddInterpFloat(eyeColourCurve, EyeColourInterpFunction, FName("Alpha"));
+
+		eyeColour = FindComponentByClass<UPointLightComponent>()->GetLightColor();
+
+		//Setting Timeline settings
+		eyeColourTimeLine->SetLooping(false);
+		eyeColourTimeLine->SetIgnoreTimeDilation(true);
 	}
 }
 
@@ -68,24 +84,40 @@ void AEyeballBoss::BeginPlay()
 void AEyeballBoss::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	
 }
 
+void AEyeballBoss::SetLookAtPlayer(bool value)
+{
+	FindComponentByClass<ULookAtPlayer>()->SetRotate(value);
+}
 
-void AEyeballBoss::TimelineFloatReturn(float value)
+void AEyeballBoss::ChangeEyeColour(FLinearColor colour)
+{
+	eyeColour = colour;
+	eyeColourTimeLine->PlayFromStart();
+}
+
+void AEyeballBoss::BounceTimelineFloatReturn(float value)
 {
 	SetActorLocation(FMath::Lerp(startPos, endPos, value));
 }
 
-void AEyeballBoss::OnTimelineFinished()
+void AEyeballBoss::BounceOnTimelineFinished()
 {
-	if (timeLine->GetPlaybackPosition() == 0.0f)
+	if (bounceTimeLine->GetPlaybackPosition() == 0.0f)
 	{
-		timeLine->Play();
+		bounceTimeLine->Play();
 	}
 	else
 	{
-		timeLine->Reverse();
+		bounceTimeLine->Reverse();
 	}
+}
+
+void AEyeballBoss::EyeColourTimelineFloatReturn(float value)
+{
+	FLinearColor pointLightColour = FindComponentByClass<UPointLightComponent>()->GetLightColor();
+	FLinearColor lerpColour = UKismetMathLibrary::LinearColorLerp(pointLightColour, eyeColour, value);
+
+	FindComponentByClass<UPointLightComponent>()->SetLightColor(lerpColour);
 }

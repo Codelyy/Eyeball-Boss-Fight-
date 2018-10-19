@@ -17,7 +17,8 @@ class EYEBALL_BOSSFIGHT_API AEyeballBoss : public APawn
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent* eyeballMesh;
 	
-	class UTimelineComponent* timeLine;
+	class UTimelineComponent* bounceTimeLine;
+	class UTimelineComponent* eyeColourTimeLine;
 
 public:
 	UPROPERTY(EditAnywhere, Category = "Behaviour")
@@ -38,10 +39,18 @@ public:
 		float zOffset;
 
 	//Delegate to be binded with TimelineFloatReturn()
-	FOnTimelineFloat InterpFunction{};
-
+	FOnTimelineFloat BounceInterpFunction{};
 	//Delegate to be binded with TimelineFinished()
-	FOnTimelineEvent TimelineFinished{};
+	FOnTimelineEvent BounceTimelineFinished{};
+
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	class UCurveFloat* eyeColourCurve;
+
+	//Delegate to be binded with TimelineFloatReturn()
+	FOnTimelineFloat EyeColourInterpFunction{};
+
+private:
+	FLinearColor eyeColour;
 
 public:
 	// Sets default values for this pawn's properties
@@ -50,13 +59,22 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+		void SetLookAtPlayer(bool value);
+
+	UFUNCTION(BlueprintCallable)
+		void ChangeEyeColour(FLinearColor colour);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
 	UFUNCTION()
-		void TimelineFloatReturn(float value);
+		void BounceTimelineFloatReturn(float value);
 	UFUNCTION()
-		void OnTimelineFinished();
+		void BounceOnTimelineFinished();
+
+	UFUNCTION()
+		void EyeColourTimelineFloatReturn(float value);
 };
