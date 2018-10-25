@@ -97,6 +97,18 @@ void AEyeballBoss::ChangeEyeColour(FLinearColor colour)
 	eyeColourTimeLine->PlayFromStart();
 }
 
+void AEyeballBoss::SetBounce(bool value)
+{
+	if (value && !bounceTimeLine->IsActive())
+	{
+		bounceTimeLine->Play();
+	}
+	else if (!value && bounceTimeLine->IsActive())
+	{
+		bounceTimeLine->Stop();
+	}
+}
+
 void AEyeballBoss::BounceTimelineFloatReturn(float value)
 {
 	SetActorLocation(FMath::Lerp(startPos, endPos, value));

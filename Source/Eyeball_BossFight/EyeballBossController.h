@@ -25,6 +25,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void LaserBeamState();
 
+	UFUNCTION(BlueprintCallable)
+		void SetState(int state);
+
 protected:
 	UBehaviorTreeComponent * behaviorComp;
 	UBlackboardComponent* blackboardComp;

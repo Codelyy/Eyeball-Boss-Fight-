@@ -65,6 +65,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ChangeEyeColour(FLinearColor colour);
 
+	UFUNCTION(BlueprintCallable)
+		void SetBounce(bool value);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

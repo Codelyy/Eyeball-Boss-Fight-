@@ -60,3 +60,8 @@ void AEyeballBossController::LaserBeamState()
 {
 	blackboardComp->SetValueAsBool(FName("FiringLaser"), true);
 }
+
+void AEyeballBossController::SetState(int state)
+{
+	blackboardComp->SetValueAsEnum(FName("State"), state);
+}
