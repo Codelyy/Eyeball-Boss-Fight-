@@ -9,6 +9,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/ArrowComponent.h"
 #include "EyeballBoss.h"
+#include "Eyeball_BossFightCharacter.h"
 
 // Sets default values
 ALaserBeam::ALaserBeam()
@@ -44,12 +45,19 @@ void ALaserBeam::CastRaycast()
 	FVector endTrace = ((forwardVector * 5000.0f) + startTrace);
 	FCollisionQueryParams* traceParms = new FCollisionQueryParams();
 
+
 	GetWorld()->LineTraceSingleByChannel(*hit, startTrace, endTrace, ECC_Visibility, *traceParms);
 
 	if (hit)
 	{
 		FireParticleSystem->Activate();
 		FireParticleSystem->SetWorldLocation(hit->Location);
+
+		if (hit->GetActor()->GetName() == "FirstPersonCharacter_C_0")
+		{
+			AEyeball_BossFightCharacter* player = Cast<AEyeball_BossFightCharacter>(hit->GetActor());
+			player->TakeDamage(0.1f);
+		}
 	}
 	else
 	{

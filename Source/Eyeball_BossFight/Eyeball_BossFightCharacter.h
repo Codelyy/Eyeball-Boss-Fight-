@@ -48,6 +48,9 @@ class AEyeball_BossFightCharacter : public ACharacter
 public:
 	AEyeball_BossFightCharacter();
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void TakeDamage(float damage);
+
 protected:
 	virtual void BeginPlay();
 
