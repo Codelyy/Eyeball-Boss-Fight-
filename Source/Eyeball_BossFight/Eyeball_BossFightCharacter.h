@@ -48,7 +48,7 @@ class AEyeball_BossFightCharacter : public ACharacter
 public:
 	AEyeball_BossFightCharacter();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable)
 		void TakeDamage(float damage);
 
 protected:
@@ -82,6 +82,9 @@ public:
 	/** Whether to use motion controller location for aiming. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	uint32 bUsingMotionControllers : 1;
+
+	UPROPERTY(BlueprintReadWrite, Category="Health")
+		float health;
 
 protected:
 	

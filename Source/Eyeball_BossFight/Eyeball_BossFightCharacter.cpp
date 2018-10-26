@@ -10,6 +10,7 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
+#include "Engine.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -78,8 +79,14 @@ AEyeball_BossFightCharacter::AEyeball_BossFightCharacter()
 	VR_MuzzleLocation->SetRelativeLocation(FVector(0.000004, 53.999992, 10.000000));
 	VR_MuzzleLocation->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));		// Counteract the rotation of the VR gun model.
 
-	// Uncomment the following line to turn motion controllers on by default:
-	//bUsingMotionControllers = true;
+	health = 100.0f;
+}
+
+void AEyeball_BossFightCharacter::TakeDamage(float damage)
+{
+	health = health - damage;
+	FString healthString = FString::SanitizeFloat(health);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, healthString);
 }
 
 void AEyeball_BossFightCharacter::BeginPlay()

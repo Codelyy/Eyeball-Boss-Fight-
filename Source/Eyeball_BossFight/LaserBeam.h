@@ -21,6 +21,8 @@ class EYEBALL_BOSSFIGHT_API ALaserBeam : public AActor
 	class UParticleSystemComponent* FireParticleSystem;
 
 private:
+	bool laserActive;
+
 	FVector laserStart;
 	FVector laserEnd;
 
@@ -30,6 +32,9 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+		void SetLaserState(bool state);
 
 	UFUNCTION(BlueprintCallable)
 	void SetLaserSource(FVector pos);

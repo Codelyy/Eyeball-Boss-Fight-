@@ -73,12 +73,33 @@ void ALaserBeam::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector playerPos = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	if (laserActive)
+	{
+		FVector playerPos = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 
-	laserStart = GetActorLocation();
-	laserEnd = playerPos;
+		laserStart = GetActorLocation();
+		laserEnd = playerPos;
 
-	CastRaycast();
+		CastRaycast();
+	}
+}
+
+void ALaserBeam::SetLaserState(bool state)
+{
+	if(state)
+	{
+		laserActive = true;
+		laserRoot->bVisible = false;
+		particleSystem->SetActive(true);
+		laserAudio->SetActive(true);
+	}
+	else
+	{
+		laserActive = false;
+		laserRoot->bVisible = true;
+		particleSystem->SetActive(false);
+		laserAudio->SetActive(false);
+	}
 }
 
 void ALaserBeam::SetLaserSource(FVector pos)
