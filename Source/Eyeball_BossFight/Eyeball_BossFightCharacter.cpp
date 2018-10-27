@@ -10,7 +10,6 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
-#include "Engine.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -85,8 +84,6 @@ AEyeball_BossFightCharacter::AEyeball_BossFightCharacter()
 void AEyeball_BossFightCharacter::TakeDamage(float damage)
 {
 	health = health - damage;
-	FString healthString = FString::SanitizeFloat(health);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, healthString);
 }
 
 void AEyeball_BossFightCharacter::BeginPlay()

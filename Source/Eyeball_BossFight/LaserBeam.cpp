@@ -89,16 +89,16 @@ void ALaserBeam::SetLaserState(bool state)
 	if(state)
 	{
 		laserActive = true;
-		laserRoot->bVisible = false;
 		particleSystem->SetActive(true);
 		laserAudio->SetActive(true);
+		FireParticleSystem->SetActive(true);
 	}
 	else
 	{
 		laserActive = false;
-		laserRoot->bVisible = true;
 		particleSystem->SetActive(false);
 		laserAudio->SetActive(false);
+		FireParticleSystem->SetActive(false);
 	}
 }
 
