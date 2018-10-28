@@ -100,6 +100,12 @@ void AEyeballBoss::SetBounce(bool value)
 	}
 }
 
+void AEyeballBoss::ResetBouncePosition()
+{
+	startPos = GetActorLocation();
+	endPos = FVector(startPos.X, startPos.Y, startPos.Z + zOffset);
+}
+
 void AEyeballBoss::BounceTimelineFloatReturn(float value)
 {
 	SetActorLocation(FMath::Lerp(startPos, endPos, value));

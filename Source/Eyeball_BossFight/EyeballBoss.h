@@ -68,6 +68,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetBounce(bool value);
 
+	UFUNCTION(BlueprintCallable)
+		void ResetBouncePosition();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

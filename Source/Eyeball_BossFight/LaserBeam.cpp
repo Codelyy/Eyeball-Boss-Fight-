@@ -56,7 +56,7 @@ void ALaserBeam::CastRaycast()
 		if (hit->GetActor()->GetName() == "FirstPersonCharacter_C_0")
 		{
 			AEyeball_BossFightCharacter* player = Cast<AEyeball_BossFightCharacter>(hit->GetActor());
-			player->TakeDamage(0.1f);
+			player->TakeDamage(0.5f);
 		}
 	}
 	else
