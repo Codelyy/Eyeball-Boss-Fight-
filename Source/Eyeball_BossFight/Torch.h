@@ -13,17 +13,22 @@ class EYEBALL_BOSSFIGHT_API ATorch : public AActor
 	GENERATED_BODY()
 	
 	class UTimelineComponent* torchColourTimeline;
+	class UTimelineComponent* torchIntensityTimeline;
 
 public:	
-
 	UPROPERTY(EditAnywhere, Category = "Timeline")
 		class UCurveFloat* colourChangeCurve;
 
-	//Delegate to be binded with TimelineFloatReturn()
 	FOnTimelineFloat TorchColourInterpFunction{};
+
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+		class UCurveFloat* intensityChangeCurve;
+
+	FOnTimelineFloat TorchIntensityInterpFunction{};
 
 private:
 	FLinearColor torchColour;
+	float torchIntensity;
 
 public:
 	// Sets default values for this actor's properties
@@ -32,6 +37,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void ChangeTorchColour(FLinearColor colour);
 
+	UFUNCTION(BlueprintCallable)
+		void ChangeTorchIntensity(float intensity);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;	
@@ -39,4 +47,7 @@ protected:
 private:
 	UFUNCTION()
 		void TorchColourTimelineFloatReturn(float value);
+
+	UFUNCTION()
+		void TorchIntensityTimelineFloatReturn(float value);
 };
