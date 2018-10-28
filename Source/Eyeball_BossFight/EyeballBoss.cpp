@@ -43,15 +43,6 @@ void AEyeballBoss::BeginPlay()
 	AEyeballBossController* AIController = Cast<AEyeballBossController>(GetController());
 	AEyeball_BossFightCharacter* player = Cast<AEyeball_BossFightCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 
-	if (AIController)
-	{
-		AIController->SetPlayerToFollow(player);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AIController Failed"));
-	}
-
 	if (bounceCurve)
 	{
 		bounceTimeLine->AddInterpFloat(bounceCurve, BounceInterpFunction, FName("Alpha"));
