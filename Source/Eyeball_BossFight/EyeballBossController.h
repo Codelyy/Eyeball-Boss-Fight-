@@ -8,6 +8,7 @@
 
 class UBehaviorTreeComponent;
 class UBlackboardComponent;
+class AEyeballBoss;
 
 UCLASS()
 class EYEBALL_BOSSFIGHT_API AEyeballBossController : public AAIController
@@ -20,16 +21,17 @@ public:
 	virtual void Possess(APawn* pawn) override;
 	virtual void Tick(float DeltaTime) override;
 
-	void SetPlayerToFollow(APawn* pawn);
-
-	UFUNCTION(BlueprintCallable)
-		void LaserBeamState();
-
 	UFUNCTION(BlueprintCallable)
 		void SetState(int state);
+
+	UFUNCTION(BlueprintCallable)
+		void SetStateInstant(int state);
 
 protected:
 	UBehaviorTreeComponent * behaviorComp;
 	UBlackboardComponent* blackboardComp;
+
+private:
+	AEyeballBoss* eyeball;
 
 };

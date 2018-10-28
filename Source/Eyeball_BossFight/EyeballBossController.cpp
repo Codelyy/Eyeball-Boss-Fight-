@@ -18,7 +18,7 @@ void AEyeballBossController::Possess(APawn* pawn)
 	Super::Possess(pawn);
 	UE_LOG(LogTemp, Error, TEXT("Tick!"));
 
-	AEyeballBoss* eyeball = Cast<AEyeballBoss>(pawn);
+	eyeball = Cast<AEyeballBoss>(pawn);
 	if (eyeball)
 	{
 		if (eyeball->behaviorTree->BlackboardAsset)
@@ -40,28 +40,16 @@ void AEyeballBossController::Possess(APawn* pawn)
 void AEyeballBossController::Tick(float DeltaTime)
 {
 	blackboardComp->SetValueAsVector(FName("PlayerPosition"), UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation());
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, blackboardComp->GetValueAsVector(FName("PlayerPosition")).ToString());
-}
-
-void AEyeballBossController::SetPlayerToFollow(APawn* pawn)
-{
-	if (blackboardComp)
-	{
-		blackboardComp->SetValueAsVector(FName("PlayerToFollow"), pawn->GetActorLocation());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Blackboard Component not found"));
-	}
-
-}
-
-void AEyeballBossController::LaserBeamState()
-{
-	blackboardComp->SetValueAsBool(FName("FiringLaser"), true);
 }
 
 void AEyeballBossController::SetState(int state)
 {
 	blackboardComp->SetValueAsEnum(FName("State"), state);
+}
+
+void AEyeballBossController::SetStateInstant(int state)
+{
+	behaviorComp->StopTree();
+	SetState(state);
+	behaviorComp->StartTree(*eyeball->behaviorTree);
 }
